@@ -1,68 +1,72 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import {
   Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
-  Divider,
   Input,
 } from '@nextui-org/react'
-import { Link } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
+import OTPInput from 'react-otp-input'
+import { Link } from 'react-router-dom'
 import * as yup from 'yup'
+import SnackBar from '../components/SnackBar'
+import { useState } from 'react'
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().required(),
+  otp: yup
+    .string()
+    .min(5, 'Completa todos los campos')
+    .max(5, 'Completa todos los campos')
+    .required(),
 })
 
-export default function Login() {
+export default function VerificationCode() {
+  const [isSnackBarOpen, setSnackBarOpen] = useState()
+
   const {
-    formState: { isDirty, isLoading, isSubmitting, isValid },
     handleSubmit,
     control,
+    formState: { isDirty, isLoading, isValid, isSubmitting },
   } = useForm({
     defaultValues: {
-      email: '',
-      password: '',
+      otp: '',
     },
     resolver: yupResolver(schema),
   })
-  const onSubmit = (data) =>
-    alert(
-      `Hay que encriptar la contraseña antes de enviarla \n\n${JSON.stringify(
-        data,
-        null,
-        2
-      )}`
-    )
+
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data, null, 2))
+    setSnackBarOpen(true)
+  }
 
   return (
     <div className="h-screen grid place-items-center p-4">
+      <SnackBar
+        open={isSnackBarOpen}
+        setOpen={setSnackBarOpen}
+        text="Verificación Exitosa"
+        type="success"
+      />
       <Card className="max-w-sm w-full">
         <CardHeader className="font-bold justify-center pb-0 pt-5">
-          Iniciar sesión
+          Código de verificación
         </CardHeader>
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
             <Controller
-              name="email"
-              control={control}
-              render={({ field }) => {
-                return <Input fullWidth label="Correo electrónico" {...field} />
-              }}
-            />
-            <Controller
-              name="password"
+              name="otp"
               control={control}
               render={({ field }) => {
                 return (
-                  <Input
-                    fullWidth
-                    label="Contraseña"
-                    type="password"
-                    {...field}
+                  <OTPInput
+                    name="otp"
+                    value={field.value}
+                    onChange={field.onChange}
+                    numInputs={5}
+                    renderSeparator={<span className="mx-2">-</span>}
+                    renderInput={(props) => <Input {...props} />}
                   />
                 )
               }}
@@ -74,7 +78,7 @@ export default function Login() {
               isLoading={isLoading}
               isDisabled={!isDirty || !isValid || isSubmitting || isLoading}
             >
-              Iniciar Sesión
+              Confirmar
             </Button>
           </form>
         </CardBody>
@@ -83,14 +87,7 @@ export default function Login() {
             to="/reset-password"
             className="text-center text-secondary-text text-sm"
           >
-            ¿Has olvidado la contraseña?
-          </Link>
-          <Divider />
-          <Link
-            to="/register"
-            className="text-center text-secondary-text text-sm"
-          >
-            ¿No tienes una cuenta? Regístrate
+            Volver
           </Link>
         </CardFooter>
       </Card>
