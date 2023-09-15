@@ -7,10 +7,14 @@ import LayoutSpiral from './components/LayoutSpiral'
 import Register from './pages/Register'
 import ResetPassword from './pages/ResetPassword'
 import VerificationCode from './pages/VerificationCode'
+import Root from './pages/Root'
 
 export const router = createBrowserRouter([
   {
     path: '/',
+    element: <Root />
+  },
+  {
     element: <LayoutSpiral />,
     children: [
       {
