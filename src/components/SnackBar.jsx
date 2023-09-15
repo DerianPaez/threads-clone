@@ -2,11 +2,11 @@
 import { useEffect } from 'react'
 import { Card, CardBody } from '@nextui-org/react'
 
-export default function SnackBar({ text, open, setOpen, type }) {
+export default function SnackBar({ text, open, onClose, type }) {
   useEffect(() => {
     if (open) {
       const timer = setTimeout(() => {
-        setOpen(false)
+        onClose()
       }, 3000)
       return () => clearTimeout(timer)
     }
