@@ -17,7 +17,7 @@ export default function Login() {
   const { login } = useAuth()
 
   const {
-    formState: { isDirty, isLoading, isSubmitting, isValid, isSubmitSuccessful },
+    formState: { isDirty, isLoading, isSubmitting, isValid },
     handleSubmit,
     control
   } = useForm({
@@ -71,7 +71,7 @@ export default function Login() {
               type='submit'
               color='primary'
               isLoading={isLoading}
-              isDisabled={!isDirty || !isValid || isSubmitting || isLoading || isSubmitSuccessful}
+              isDisabled={!isDirty || !isValid || isSubmitting || isLoading}
             >
               Iniciar Sesión
             </Button>
