@@ -5,7 +5,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import SnackBar from '../components/SnackBar'
 import { useAuth } from '../hooks/useAuth'
-import { useSnackBar } from '../hooks/useSnackBar'
+// import { useSnackBar } from '../hooks/useSnackBar'
+import { useContext } from 'react'
+import { SnackbarContext } from '../context/snackbar'
 
 const schema = yup.object().shape({
   email: yup.string().email('Correo invalido').required('Correo requerido'),
@@ -13,7 +15,7 @@ const schema = yup.object().shape({
 })
 
 export default function Login() {
-  const { isSnackBarOpen, openSnackBar, snackBarMessage, snackBarType, closeSnackBar } = useSnackBar()
+  const { openSnackBar, closeSnackBar, isSnackBarOpen, snackBarMessage, snackBarType } = useContext(SnackbarContext)
   const { login } = useAuth()
 
   const {
