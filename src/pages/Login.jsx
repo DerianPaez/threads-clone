@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input } from '@nextui-org/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input, Spinner } from '@nextui-org/react'
 import { Link } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -29,8 +29,8 @@ export default function Login() {
     mode: 'all'
   })
 
-  const onSubmit = (data) => {
-    login(data).catch((error) => {
+  const onSubmit = async (data) => {
+    await login(data).catch((error) => {
       openSnackBar(error.message, 'danger')
     })
   }
@@ -70,10 +70,9 @@ export default function Login() {
               fullWidth
               type='submit'
               color='primary'
-              isLoading={isLoading}
               isDisabled={!isDirty || !isValid || isSubmitting || isLoading}
             >
-              Iniciar Sesión
+              {!isSubmitting ? 'Iniciar Sesión' : <Spinner color='white' size='sm' />}
             </Button>
           </form>
         </CardBody>

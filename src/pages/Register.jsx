@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input } from '@nextui-org/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input, Spinner } from '@nextui-org/react'
 import { Link } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -44,7 +44,7 @@ export default function Register() {
   })
 
   const onSubmit = async (data) => {
-    register(data)
+    await register(data)
       .then(() => {
         openSnackBar('Registro exitoso', 'success')
         navigate('/login')
@@ -106,10 +106,9 @@ export default function Register() {
               fullWidth
               type='submit'
               color='primary'
-              isLoading={isLoading}
               isDisabled={!isDirty || !isValid || isSubmitting || isLoading}
             >
-              Iniciar Sesión
+              {!isSubmitting ? 'Registrar' : <Spinner color='white' size='sm' />}
             </Button>
           </form>
         </CardBody>
