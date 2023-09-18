@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from 'react'
+import SnackBar from '../components/SnackBar'
 
 const SnackbarContext = createContext()
 
@@ -31,6 +32,7 @@ export default function SnackbarProvider({ children }) {
         closeSnackBar
       }}
     >
+      <SnackBar open={isSnackBarOpen} onClose={closeSnackBar} type={snackBarType} text={snackBarMessage} />
       {children}
     </SnackbarContext.Provider>
   )
