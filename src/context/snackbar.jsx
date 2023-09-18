@@ -1,9 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from 'react'
 
-export const SnackbarContext = createContext()
+const SnackbarContext = createContext()
 
-export function SnackbarProvider({ children }) {
+export default function SnackbarProvider({ children }) {
   const [isSnackBarOpen, setSnackBarOpen] = useState()
   const [snackBarMessage, setSnackBarMessage] = useState()
   const [snackBarType, setSnackBarType] = useState()
@@ -37,7 +37,7 @@ export function SnackbarProvider({ children }) {
 }
 
 export function useSnackbarContext() {
-  const context = useContext()
+  const context = useContext(SnackbarContext)
   if (!context) {
     throw new Error('useSnackBar must be used within a SnackBarProvider')
   }

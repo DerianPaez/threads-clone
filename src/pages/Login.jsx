@@ -3,11 +3,8 @@ import { Link } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import SnackBar from '../components/SnackBar'
 import { useAuth } from '../hooks/useAuth'
-// import { useSnackBar } from '../hooks/useSnackBar'
-import { useContext } from 'react'
-import { SnackbarContext } from '../context/snackbar'
+import { useSnackbarContext } from '../context/snackbar'
 
 const schema = yup.object().shape({
   email: yup.string().email('Correo invalido').required('Correo requerido'),
@@ -15,7 +12,7 @@ const schema = yup.object().shape({
 })
 
 export default function Login() {
-  const { openSnackBar, closeSnackBar, isSnackBarOpen, snackBarMessage, snackBarType } = useContext(SnackbarContext)
+  const { openSnackBar } = useSnackbarContext()
   const { login } = useAuth()
 
   const {
@@ -39,7 +36,6 @@ export default function Login() {
 
   return (
     <div className='h-screen grid place-items-center p-4'>
-      <SnackBar open={isSnackBarOpen} onClose={closeSnackBar} text={snackBarMessage} type={snackBarType} />
       <Card className='max-w-sm w-full'>
         <CardHeader className='font-bold justify-center pb-0 pt-5'>Iniciar sesión</CardHeader>
         <CardBody>

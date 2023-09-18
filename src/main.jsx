@@ -8,7 +8,8 @@ import Register from './pages/Register'
 import ResetPassword from './pages/ResetPassword'
 import VerificationCode from './pages/VerificationCode'
 import Root from './pages/Root'
-import { SnackbarProvider } from './context/snackbar'
+import SnackbarProvider from './context/snackbar'
+import SnackBar from './components/SnackBar'
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <SnackbarProvider>
+      <SnackBar />
       <RouterProvider router={router} />
     </SnackbarProvider>
   </React.StrictMode>
