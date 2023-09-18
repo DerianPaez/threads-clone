@@ -5,10 +5,9 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useEffect } from 'react'
-import SnackBar from '../components/SnackBar'
-import { useSnackBar } from '../hooks/useSnackBar'
 import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
+import { useSnackbarContext } from '../context/snackbar'
 
 const schema = yup.object().shape({
   fullname: yup.string().required('Nombre requerido'),
@@ -23,7 +22,7 @@ const schema = yup.object().shape({
 })
 
 export default function Register() {
-  const { isSnackBarOpen, openSnackBar, snackBarMessage, snackBarType, closeSnackBar } = useSnackBar()
+  const { openSnackBar } = useSnackbarContext()
   const { register } = useAuth()
   const navigate = useNavigate()
 
@@ -46,8 +45,8 @@ export default function Register() {
   const onSubmit = async (data) => {
     await register(data)
       .then(() => {
-        openSnackBar('Registro exitoso', 'success')
         navigate('/login')
+        openSnackBar('Registro exitoso', 'success')
       })
       .catch((error) => {
         openSnackBar(error.message, 'danger')
@@ -66,7 +65,6 @@ export default function Register() {
 
   return (
     <div className='h-screen grid place-items-center p-4'>
-      <SnackBar open={isSnackBarOpen} onClose={closeSnackBar} text={snackBarMessage} type={snackBarType} />
       <Card className='max-w-sm w-full'>
         <CardHeader className='font-bold justify-center pb-0 pt-5'>Registrar cuenta</CardHeader>
         <CardBody>
