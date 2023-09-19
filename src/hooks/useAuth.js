@@ -14,8 +14,10 @@ export const useAuth = () => {
   useEffect(() => {
     validateSession()
       .then((res) => {
-        const isValid = res.valid
-        setIsAuthenticated(isValid)
+        if (res) {
+          const isValid = res.valid
+          setIsAuthenticated(isValid)
+        }
       })
       .catch((error) => {
         openSnackBar(error.message, 'danger')
