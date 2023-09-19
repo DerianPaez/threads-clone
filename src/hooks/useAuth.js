@@ -1,17 +1,30 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { apiUrl } from '../constants/url'
 import { useNavigate } from 'react-router-dom'
+import { useSnackbarContext } from '../context/snackbar'
 
 export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState()
   const navigate = useNavigate()
+  const { openSnackBar } = useSnackbarContext()
 
   useEffect(() => {
-    setIsLoading(true)
     validateSession()
-    setIsLoading(false)
+      .then((res) => {
+        const isValid = res.valid
+        setIsAuthenticated(isValid)
+      })
+      .catch((error) => {
+        openSnackBar(error.message, 'danger')
+        localStorage.removeItem('token')
+        navigate('/login')
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }, [])
 
   const register = async (data) => {
@@ -46,14 +59,12 @@ export const useAuth = () => {
           }
           throw new Error('Error inesperado, vuelve a intentar mas tarde')
         }
-
         return response.json()
       })
       .then((res) => {
         const token = res?.token
         if (token) {
           localStorage.setItem('token', token)
-          setIsAuthenticated(true)
           navigate('/')
         }
       })
@@ -66,14 +77,26 @@ export const useAuth = () => {
     navigate('/login')
   }
 
-  const validateSession = () => {
+  const validateSession = async () => {
     const token = localStorage.getItem('token')
     if (token) {
-      setIsAuthenticated(true)
-      return
+      return await fetch(`${apiUrl}/api/user/validate-token`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-type': 'application/json'
+        }
+      }).then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('La sesión ha expirado, vuelve a iniciar sesión')
+          }
+          throw new Error('Error inesperado, vuelve a intentar mas tarde')
+        }
+        return response.json()
+      })
     }
-
-    setIsAuthenticated(false)
+    return false
   }
 
   return { isAuthenticated, isLoading, user, login, logout, register }
