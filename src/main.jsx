@@ -5,10 +5,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Login from './pages/Login'
 import LayoutSpiral from './components/LayoutSpiral'
 import Register from './pages/Register'
-import ResetPassword from './pages/ResetPassword'
+import RecoverInit from './pages/RecoverInit'
 import VerificationCode from './pages/VerificationCode'
 import Root from './pages/Root'
 import SnackbarProvider from './context/snackbar'
+import ChangePassword from './pages/ChangePassword'
+import RecoverLayout from './components/RecoverLayout'
 
 export const router = createBrowserRouter([
   {
@@ -27,12 +29,23 @@ export const router = createBrowserRouter([
         element: <Register />
       },
       {
-        path: '/reset-password',
-        element: <ResetPassword />
-      },
-      {
-        path: '/verification-code',
-        element: <VerificationCode />
+        path: '/recover',
+        element: <RecoverLayout />,
+        children: [
+          {
+            index: true,
+            path: 'init',
+            element: <RecoverInit />
+          },
+          {
+            path: 'verification-code',
+            element: <VerificationCode />
+          },
+          {
+            path: 'change-password',
+            element: <ChangePassword />
+          }
+        ]
       }
     ]
   }

@@ -111,7 +111,7 @@ export default function Register() {
           </form>
         </CardBody>
         <CardFooter className='grid grid-cols-1 gap-3 pb-5 pt-0 justify-center'>
-          <Link to='' className='text-center text-secondary-text text-sm'>
+          <Link to='/recover/init' className='text-center text-secondary-text text-sm'>
             ¿Has olvidado la contraseña?
           </Link>
           <Divider />
