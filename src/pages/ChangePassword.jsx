@@ -1,54 +1,44 @@
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input, Spinner } from '@nextui-org/react'
-import { Link } from 'react-router-dom'
+import { Button, Card, CardBody, CardFooter, CardHeader, Input, Spinner } from '@nextui-org/react'
 import { Controller, useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useAuth } from '../hooks/useAuth'
-import { useSnackbarContext } from '../context/snackbar'
 
 const schema = yup.object().shape({
-  email: yup.string().email('Correo invalido').required('Correo requerido'),
-  password: yup.string().required('Contraseña requerida')
+  password: yup
+    .string()
+    .matches(
+      /^(?=.*[0-9])(?=.*[!@#$%^&*+-])[a-zA-Z0-9!@#$%^&*+-]{8,}$/,
+      'La contraseña debe tener al menos 8 caracteres, un número y un caracter especial'
+    )
+    .required('Contraseña requerida')
 })
 
-export default function Login() {
-  const { openSnackBar } = useSnackbarContext()
-  const { login } = useAuth()
-
+export default function ChangePassword() {
+  const navigate = useNavigate()
   const {
     formState: { isDirty, isLoading, isSubmitting, isValid },
     handleSubmit,
     control
   } = useForm({
     defaultValues: {
-      email: '',
       password: ''
     },
     resolver: yupResolver(schema),
     mode: 'all'
   })
 
-  const onSubmit = async (data) => {
-    await login(data).catch((error) => {
-      openSnackBar(error.message, 'danger')
-    })
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data, null, 2))
+    navigate('/login')
   }
 
   return (
     <div className='h-screen grid place-items-center p-4'>
       <Card className='max-w-sm w-full'>
-        <CardHeader className='font-bold justify-center pb-0 pt-5'>Iniciar sesión</CardHeader>
+        <CardHeader className='font-bold justify-center pb-0 pt-5'>Ingresa tu nueva contraseña</CardHeader>
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)} className='grid gap-2'>
-            <Controller
-              name='email'
-              control={control}
-              render={({ field, fieldState }) => {
-                return (
-                  <Input fullWidth label='Correo electrónico' errorMessage={fieldState.error?.message} {...field} />
-                )
-              }}
-            />
             <Controller
               name='password'
               control={control}
@@ -70,17 +60,13 @@ export default function Login() {
               color='primary'
               isDisabled={!isDirty || !isValid || isSubmitting || isLoading}
             >
-              {!isSubmitting ? 'Iniciar Sesión' : <Spinner color='white' size='sm' />}
+              {!isSubmitting ? 'Establecer nueva contraseña' : <Spinner color='white' size='sm' />}
             </Button>
           </form>
         </CardBody>
         <CardFooter className='grid grid-cols-1 gap-3 pb-5 pt-0 justify-center'>
-          <Link to='/recover/init' className='text-center text-secondary-text text-sm'>
-            ¿Has olvidado la contraseña?
-          </Link>
-          <Divider />
-          <Link to='/register' className='text-center text-secondary-text text-sm'>
-            ¿No tienes una cuenta? Regístrate
+          <Link to='/recover/verification-code' className='text-center text-secondary-text text-sm'>
+            Volver
           </Link>
         </CardFooter>
       </Card>
