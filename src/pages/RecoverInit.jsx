@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardFooter, CardHeader, Input } from '@nextui-org/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Input, Spinner } from '@nextui-org/react'
 import { Controller, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -47,10 +47,9 @@ export default function RecoverInit() {
               fullWidth
               type='submit'
               color='primary'
-              isLoading={isLoading}
               isDisabled={!isDirty || !isValid || isSubmitting || isLoading}
             >
-              Enviar código de verificación
+              {!isSubmitting ? 'Enviar código de verificación' : <Spinner color='white' size='sm' />}
             </Button>
           </form>
         </CardBody>

@@ -10,7 +10,6 @@ import VerificationCode from './pages/VerificationCode'
 import Root from './pages/Root'
 import SnackbarProvider from './context/snackbar'
 import ChangePassword from './pages/ChangePassword'
-import RecoverLayout from './components/RecoverLayout'
 
 export const router = createBrowserRouter([
   {
@@ -29,23 +28,16 @@ export const router = createBrowserRouter([
         element: <Register />
       },
       {
-        path: '/recover',
-        element: <RecoverLayout />,
-        children: [
-          {
-            index: true,
-            path: 'init',
-            element: <RecoverInit />
-          },
-          {
-            path: 'verification-code',
-            element: <VerificationCode />
-          },
-          {
-            path: 'change-password',
-            element: <ChangePassword />
-          }
-        ]
+        path: '/recover/init',
+        element: <RecoverInit />
+      },
+      {
+        path: '/recover/verification-code',
+        element: <VerificationCode />
+      },
+      {
+        path: '/recover/change-password',
+        element: <ChangePassword />
       }
     ]
   }
